@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Блог маркiза.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffb347 0%, #ffcc33 50%, #ffdb58 100%);
+            min-height: 100vh;
+            color: #2c2c2c;
+            overflow-x: hidden;
+        }
+
+        /* Анимированные частицы фона */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Шапка-ограждение */
+        .fence {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 20px 0;
+            border-bottom: 4px solid #e9ecef;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: #495057;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 8px;
+            left: 50%;
+            background: #ff6b35;
+            transition: all 0.4s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: #ff6b35;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #ff6b35;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Основная область контента */
+        .content {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Стили для демонстрационных блоков - можно удалить */
+        .demo-section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            color: #ff6b35;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+
+        .placeholder {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 18px;
+            border: 2px dashed #dee2e6;
+        }
+
+        /* Утилитарные классы для быстрой верстки */
+        .grid {
+            display: grid;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #ff6b35;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #ff6b35, #ffb347);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированные частицы фона -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Шапка-ограждение -->
+    <nav class="fence">
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">О Маркизе</a>
+            <a href="gallery.html" class="nav-link">Галерея</a>
+            <a href="blog.html" class="nav-link">Блог</a>
+        </div>
+    </nav>
+
+    <!-- Основная область для контента -->
+    <main class="content">
+        
+        <!-- Демонстрационная секция - можно удалить -->
+        <div class="demo-section">
+            <h2>Это блог великого и неповторимого маркiза. Тут минимум 5 постов за день.</h2>
+            <h2>Если ты хочешь показать свои мысли такому великому, как я, я пришел сюда с ботом в ТГ. Так, показав свои мысли мне, возможно, я покажу эти мысли в моем блоге. В принпице, в этом ведь суть?</h2>
+            <h2><a href="https://t.me/markizBlogdotcomBot">Моя великая предложка.</a></h2>
+        
+
+        <!-- Еще один демо-блок -->
+            <div class="post1">
+                <h2>18.11.25, 21:00, Вторник.</h2>
+                <h2>Сегодня я создал этот сайт. Впрочем, это было не так сложно, что логично для такого мудрого кота, как я.</h2>
+                h2>18.11.25, 22:11, Вторник.</h2>
+                <h2>Фух, устал я. Пора облизываться и ложиться спать. Завтра планирую кое-как обновить свой сайт. Но не обещаю, жалкие людишки.</h2>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Создание анимированных частиц
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 20 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 3 + 3;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // ИСПРАВЛЕННЫЙ КОД ДЛЯ РАБОЧИХ КНОПОК
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    
+                    // Если ссылка ведет на якорь (#blog и т.д.)
+                    if (href.includes('#')) {
+                        // Если мы уже на нужной странице
+                        if (href.startsWith('#') || href.includes(window.location.pathname)) {
+                            e.preventDefault();
+                            const targetId = href.includes('#') ? href.split('#')[1] : href;
+                            const targetElement = document.querySelector('#' + targetId);
+                            
+                            if (targetElement) {
+                                targetElement.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                            }
+                        }
+                        // Если ссылка ведет на другую страницу с якорем (main.html#blog)
+                        // то браузер сам обработает переход - НИЧЕГО НЕ ДЕЛАЕМ
+                    }
+                    // Если ссылка ведет на файл без якоря (gallery.html) 
+                    // то тоже работает как обычно - НИЧЕГО НЕ ДЕЛАЕМ
+                });
+            });
+        });
+    </script>
+</body>
+</html>
